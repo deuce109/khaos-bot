@@ -98,6 +98,9 @@ def help(_):
           examples: `!dice 1d6`, `!dice 1d4 1d6`
     """
 
+def source():
+    return "My source code is located [here]|(https://github.com/deuce109/ip-bot)"
+
 def get_pattern_mappings():
     mappings = dict()
 
@@ -108,5 +111,6 @@ def get_pattern_mappings():
     mappings["coin"] = coin
     mappings["help"] = help
     mappings["dice"] = dice
+    mappings["source"] = source
 
     return mappings
