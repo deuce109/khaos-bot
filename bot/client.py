@@ -27,17 +27,14 @@ class MyClient(discord.Client):
             base_command = command[0]
             args = command[1:]
 
-            async def fallback(message, args=None):
+            def fallback(args=None):
 
                 message_string = "Unknown command: %s" % base_command
                 if args:
                     message_string += "\nArguments: " + ", ".join(args)
 
-                await message.channel.send(message_string)
+                return message_string
 
             mapping = get_pattern_mappings().get(base_command, fallback)
 
-            if args != []:   
-                await mapping(message, args)
-            else: 
-                await mapping(message)
+            await message.channels.send(mapping(args))
