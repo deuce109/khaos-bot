@@ -37,4 +37,6 @@ class MyClient(discord.Client):
 
             mapping = get_pattern_mappings().get(base_command, fallback)
 
-            await message.channels.send(mapping(args))
+            print(args)
+
+            await message.channel.send(mapping(args))

@@ -29,7 +29,7 @@ def chunks(data, chunk_size=5):
     for i in range(0, len(data), chunk_size):
         yield data[i:i + chunk_size]
 
-def rng(*args):
+def rng(args):
 
     if args:
         

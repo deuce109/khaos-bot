@@ -8,10 +8,10 @@ import sys
 
 client = docker.from_env()
 
-def pong(args=None):
+def pong(_):
     return "Pong!"
 
-def get_servers(args=None):
+def get_servers(_):
 
     result_string: str = "## IP: \nInternal: 192.168.86.62\n"
 
@@ -27,28 +27,32 @@ def get_servers(args=None):
 
     return "%s\n%s" % (result_string, docker_info)
 
-def random(*args):
+def random(args):
+
+    print(args)
 
     rands = helpers.rng(args).tolist()
 
 
     output = "\n".join([", ".join([str(n) for n in rng]) for rng in helpers.chunks(rands, 5)] )
 
-    return output
+    return "Results:\n" + output
 
-def dice(*args):
-    output = ""
+def dice(args):
+    output = "Results:"
 
     running_total = 0
 
     for arg in args:
 
-        splits = arg.split("d") or arg.split("D")
+        sep = "d" if "d" in arg else "D"
+
+        splits = arg.split(sep)
 
         amount = splits[0]
         sides = splits[1]
 
-        outcomes = np.array([outcome + 1 for outcome in helpers.rng("--max", sides, "--amount", amount)])
+        outcomes = np.array([outcome + 1 for outcome in helpers.rng(["--max", sides, "--amount", amount])])
 
         total = outcomes.sum()
 
@@ -66,14 +70,16 @@ def dice(*args):
     return output
 
 
-def coin(*args):
+def coin(args):
 
     outcome = str(np.random.choice(["heads", "tails"])) 
 
     return "Outcome was %s.\nYou %s" % (outcome, "win!" if outcome.upper() == args[0].upper() else "lose.")
 
-def help(*args):
+def help(_):
     return """
+    # Commands:
+
     help: Displays this text
 
     servers: List of servers and their ports
@@ -86,7 +92,7 @@ def help(*args):
 
     rng or random: ( --digits <num_of_digits> or --min <min number> --max <max number> ) --amount <amount of #'s to generate>
                    examples: `!rng --digits 5`, `!random --min 0 --max 5 --amount 2`
-                   
+
     dice: <list of dice combinations>
           Simulates dice rolls based off of listed dice
           examples: `!dice 1d6`, `!dice 1d4 1d6`
@@ -101,5 +107,6 @@ def get_pattern_mappings():
     mappings["rng"] = random
     mappings["coin"] = coin
     mappings["help"] = help
+    mappings["dice"] = dice
 
     return mappings
