@@ -18,9 +18,9 @@ def get_servers(_):
     result = requests.get("https://ifconfig.me/ip")
 
     if result.status_code == 200:
-        result_string = "External: %s" % result.text.strip()
+        result_string += "External: %s" % result.text.strip()
     else:
-        result_string = "Error retrieving: [%d] %s" % (result.status_code, result.reason)
+        result_string += "Error retrieving: [%d] %s" % (result.status_code, result.reason)
 
 
     docker_info = helpers.get_docker_port_info(client)
@@ -98,13 +98,14 @@ def help(_):
           examples: `!dice 1d6`, `!dice 1d4 1d6`
     """
 
-def source():
-    return "My source code is located [here]|(https://github.com/deuce109/ip-bot)"
+def source(_):
+    return "My source code is located at https://github.com/deuce109/ip-bot"
 
 def get_pattern_mappings():
     mappings = dict()
 
     mappings["ping"] = pong
+    mappings["ip"] = get_servers
     mappings["servers"] = get_servers
     mappings["random"] = random
     mappings["rng"] = random
