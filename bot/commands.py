@@ -12,7 +12,7 @@ def help(args):
     if len(args) == 0:
         
         help_text = "# Commands \n"
-        help_text += "\n".join([command["help_text"] for command in commands if command.get("help_text", "") != ""])
+        help_text += "\n\n".join([command["help_text"] for command in commands if command.get("help_text", "") != ""])
         return help_text
     else:
         command = find_command(args[0])
@@ -50,9 +50,7 @@ commands.append(  {
         del | delete | remove | rm <name>: Deletes the quote from the listing
         list: Lists available quotes
         rand: Gives a random quote
-        <quote_name>: Displays the quote
-        
-    """
+        <quote_name>: Displays the quote"""
 } )
 
 commands.append(  {
