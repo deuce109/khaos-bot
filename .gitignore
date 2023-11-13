@@ -7,3 +7,4 @@ handlertest.py
 *.json
 
 __pycache__
+data

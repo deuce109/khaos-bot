@@ -10,5 +10,4 @@ services:
         bot_token: ${DISCORD_BOT_SECRET}
     volumes:
     - //var/run/docker.sock:/var/run/docker.sock:ro
-    - ./registry.json:/app/registry.json
-    - ./qutoes.json:/app/qutoes.json
+    - ./data:/app/data

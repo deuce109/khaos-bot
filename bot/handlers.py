@@ -77,7 +77,7 @@ def source(_):
 
 def quotes(args):
     quote_mapping: dict = {}
-    with open('quotes.json', 'r') as quote_reader:
+    with open('data/quotes.json', 'r') as quote_reader:
         quote_mapping = json.load(quote_reader)
 
     if args[0] == 'add':
@@ -85,7 +85,7 @@ def quotes(args):
             return "Arguments to quote command must be in form '!quote add <name> <quote>"
         else:
             quote_mapping[args[1]] = args[2]
-            with open('quotes.json', 'w') as quote_writer:
+            with open('data/quotes.json', 'w') as quote_writer:
                 json.dump(quote_mapping, quote_writer)
             return "Quote sucessfully added"
     elif args[0] == 'delete' or args[0] == "del" or args[0] == "remove" :
@@ -93,7 +93,7 @@ def quotes(args):
             return "Arguments to quote command must be in form '!quote remove <name>"
         else: 
             del quote_mapping[args[1]]
-            with open('quotes.json', 'w') as quote_writer:
+            with open('data/quotes.json', 'w') as quote_writer:
                 json.dump(quote_mapping, quote_writer)
             return "Quote sucessfully removed"
     elif args[0] == 'random' or args[0] == 'rand' or args[0] == '':

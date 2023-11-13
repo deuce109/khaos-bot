@@ -13,9 +13,6 @@ def ps(client, _):
 
     data = '"Container Name",Image,Created,Status\n'
 
-    with open("./test.json", 'w') as test:
-        json.dump(containers[0].attrs, test, indent="\t")
-
     for container in containers:
         name = container.attrs.get("Name").replace("/", "", 1)
         image = container.attrs.get("Config").get("Image")
@@ -46,7 +43,7 @@ def restart(client: docker.DockerClient, args):
     container.restart()
 
 def compose_register(args):
-    with open('./docker_registry.json', "r+") as registry:
+    with open('./data/docker_registry.json', "r+") as registry:
 
         json_string = registry.read()
 
@@ -67,7 +64,7 @@ def compose_register(args):
     return f"Successfully registered {args[0]}"
 
 def compose_up(args):
-    with open('docker_registry.json') as registry:
+    with open('data/docker_registry.json') as registry:
         registry_listing = [item for item in json.load(registry) if item["name"] == args[0]][0]
     
     command_output = subprocess.check_output(['docker','compose','--file', registry_listing['path'], 'up', '-d'])
@@ -75,7 +72,7 @@ def compose_up(args):
     return command_output
 
 def compose_down(args):
-    with open('docker_registry.json') as registry:
+    with open('data/docker_registry.json') as registry:
         registry_listing = [item for item in json.load(registry) if item["name"] == args[0]][0]
     
     command_output = subprocess.check_output(['docker','compose','--file', registry_listing['path'], 'down'])
@@ -83,7 +80,7 @@ def compose_down(args):
     return command_output
 
 def compose_restart(args):
-    with open('docker_registry.json') as registry:
+    with open('data/docker_registry.json') as registry:
         registry_listing = [item for item in json.load(registry) if item["name"] == args[0]][0]
     
     command_output = subprocess.check_output(['docker','compose','--file', registry_listing['path'], 'restart'])
