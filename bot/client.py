@@ -1,12 +1,9 @@
-from bot.handlers import get_pattern_mappings
 import shlex
 import discord
+import bot.commands as commands
 
 
 class MyClient(discord.Client):
-
-    # def __init__(self):
-    #     self.pattern_mappings = get_pattern_mappings()
 
 
     async def on_ready(self):
@@ -35,8 +32,8 @@ class MyClient(discord.Client):
 
                 return message_string
 
-            mapping = get_pattern_mappings().get(base_command, fallback)
+            mapping = commands.get_command(base_command) or fallback
 
-            print(args)
+            message_source = message.channel if message.channel else message.author
 
-            await message.channel.send(mapping(args))
+            await message_source.send(mapping(args))

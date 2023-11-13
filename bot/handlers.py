@@ -1,19 +1,17 @@
-import shlex
+import json
 import requests
 
-import docker
 import bot.helpers as helpers
+import bot.docker.commands as docker_commands
+import bot.docker.helpers as docker_helpers
 import numpy as np
-import sys
 
-client = docker.from_env()
-
-def pong(_):
+def ping(_):
     return "Pong!"
 
 def get_servers(_):
 
-    result_string: str = "## IP: \nInternal: 192.168.86.62\n"
+    result_string: str = "# Servers\n## IP: \nInternal: 192.168.86.62\n"
 
     result = requests.get("https://ifconfig.me/ip")
 
@@ -23,13 +21,11 @@ def get_servers(_):
         result_string += "Error retrieving: [%d] %s" % (result.status_code, result.reason)
 
 
-    docker_info = helpers.get_docker_port_info(client)
+    docker_info = docker_helpers.get_port_info()
 
     return "%s\n%s" % (result_string, docker_info)
 
 def random(args):
-
-    print(args)
 
     rands = helpers.rng(args).tolist()
 
@@ -76,42 +72,38 @@ def coin(args):
 
     return "Outcome was %s.\nYou %s" % (outcome, "win!" if outcome.upper() == args[0].upper() else "lose.")
 
-def help(_):
-    return """
-    # Commands:
-
-    help: Displays this text
-
-    servers: List of servers and their ports
-
-    ping: Pings the bot and responds with 'Pong!'
-
-    coin: <prediction>
-          Simulates a coin flip and tells you if you won or lost based off your prediction
-          example: `!coin Heads`
-
-    rng or random: ( --digits <num_of_digits> or --min <min number> --max <max number> ) --amount <amount of #'s to generate>
-                   examples: `!rng --digits 5`, `!random --min 0 --max 5 --amount 2`
-
-    dice: <list of dice combinations>
-          Simulates dice rolls based off of listed dice
-          examples: `!dice 1d6`, `!dice 1d4 1d6`
-    """
-
 def source(_):
     return "My source code is located at https://github.com/deuce109/ip-bot"
 
-def get_pattern_mappings():
-    mappings = dict()
+def quotes(args):
+    quote_mapping: dict = {}
+    with open('quotes.json', 'r') as quote_reader:
+        quote_mapping = json.load(quote_reader)
 
-    mappings["ping"] = pong
-    mappings["ip"] = get_servers
-    mappings["servers"] = get_servers
-    mappings["random"] = random
-    mappings["rng"] = random
-    mappings["coin"] = coin
-    mappings["help"] = help
-    mappings["dice"] = dice
-    mappings["source"] = source
+    if args[0] == 'add':
+        if args[1] == '' or args[2] == '' or len(args) > 3:
+            return "Arguments to quote command must be in form '!quote add <name> <quote>"
+        else:
+            quote_mapping[args[1]] = args[2]
+            with open('quotes.json', 'w') as quote_writer:
+                json.dump(quote_mapping, quote_writer)
+            return "Quote sucessfully added"
+    elif args[0] == 'delete' or args[0] == "del" or args[0] == "remove" :
+        if args[1] == '' or len(args) > 2:
+            return "Arguments to quote command must be in form '!quote remove <name>"
+        else: 
+            del quote_mapping[args[1]]
+            with open('quotes.json', 'w') as quote_writer:
+                json.dump(quote_mapping, quote_writer)
+            return "Quote sucessfully removed"
+    elif args[0] == 'random' or args[0] == 'rand' or args[0] == '':
+        keys = list(quote_mapping.keys())
+        return quote_mapping.get(keys[np.random.randint(0, len(keys))])
+    else:
+        return quote_mapping.get(args[0], "Please specify a quote to show")
+    
 
-    return mappings
+
+def docker_handler(args):
+
+    return docker_commands.execute_command(args[0], args[1:])

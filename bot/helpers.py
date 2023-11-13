@@ -1,33 +1,50 @@
-import shlex
+import math
+import subprocess
 import numpy as np
+import datetime
 
-def get_docker_port_info(client):
-    containers = client.containers.list()
+def get_time_since(time: datetime.datetime):
+    now = datetime.datetime.now()
 
-    container_info = ""
-
-    for container in containers:
-
-        name = container.attrs.get("Config").get("Labels").get("SERVER_NAME")
-        type = container.attrs.get("Config").get("Labels").get("SERVER_TYPE")
-        port = container.attrs.get("Config").get("Labels").get("CONNECTION_PORT")
-
-        if not name:
-            continue
-
-        if type:
-            type = "Type: " + type
-
-        if port:
-            port = "Port: " + port
+    time = datetime.datetime.fromtimestamp(time.timestamp(), now.tzinfo)
     
-        container_info += "## %s\n%s\n%s\n" % (name, type, port)
+    difference = now - time
 
-    return container_info.strip()
+    time_since: str
+
+    days = math.floor(difference.seconds / 86400)
+    hours = math.floor(difference.seconds / 3600)
+    minutes = math.floor(difference.seconds / 60)
+    seconds = difference.seconds
+
+    if days >= 1:
+        if days == 1:
+            time_since = "1 day ago"
+        else:
+            time_since = f"{days} days ago"
+    elif hours >= 1:
+        time_since = f"{hours} hours ago"
+    elif minutes >= 1:
+        time_since = f"{minutes} minutes ago"
+    else:
+        time_since = f"{seconds} seconds ago"
+
+    return time_since
 
 def chunks(data, chunk_size=5):
     for i in range(0, len(data), chunk_size):
         yield data[i:i + chunk_size]
+
+def run_command(args: [str]) -> str:
+    result: str
+
+    try:
+        result = subprocess.check_output(args,shell=True)
+
+    except Exception as e:
+        result = str(e)
+
+    return result
 
 def rng(args):
 
