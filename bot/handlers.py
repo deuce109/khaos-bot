@@ -68,9 +68,18 @@ def dice(args):
 
 def coin(args):
 
-    outcome = str(np.random.choice(["heads", "tails"])) 
+    valid_predictions = [prediction.casefold() for prediction in ["t", "h", "Tail", "Head", "Tails", "Heads"]]
 
-    return "Outcome was %s.\nYou %s" % (outcome, "win!" if outcome.upper() == args[0].upper() else "lose.")
+    if args[0] in valid_predictions:
+
+        prediction = args[0][0].casefold()
+
+        outcome = str(np.random.choice(["h".casefold(), "t".casefold()])) 
+
+        return "Outcome was %s.\nYou %s" % ("heads" if outcome == "h" else "tails", "win!" if outcome == prediction else "lose.")
+    
+    else:
+        return "Please use a valid prediction\nOptions: " + ", ".join(valid_predictions) 
 
 def source(_):
     return "My source code is located at https://github.com/deuce109/ip-bot"
