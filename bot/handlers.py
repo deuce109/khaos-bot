@@ -97,7 +97,7 @@ def quotes(args):
             with open('data/quotes.json', 'w') as quote_writer:
                 json.dump(quote_mapping, quote_writer)
             return "Quote sucessfully added"
-    elif args[0] == 'delete' or args[0] == "del" or args[0] == "remove" :
+    elif args[0] == 'delete' or args[0] == "del" or args[0] == "remove" or args[0] == "rm" :
         if args[1] == '' or len(args) > 2:
             return "Arguments to quote command must be in form '!quote remove <name>"
         else: 
@@ -108,6 +108,9 @@ def quotes(args):
     elif args[0] == 'random' or args[0] == 'rand' or args[0] == '':
         keys = list(quote_mapping.keys())
         return quote_mapping.get(keys[np.random.randint(0, len(keys))])
+    elif args[0] == "list" or args[0] == "ls":
+        keys = list(quote_mapping.keys())
+        return "\n".join([", ".join([key for key in chunk]) for chunk in helpers.chunks(keys, 5)] )
     else:
         return quote_mapping.get(args[0], "Please specify a quote to show")
     

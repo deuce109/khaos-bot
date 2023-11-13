@@ -44,7 +44,15 @@ commands.append(  {
     "commands":[
         "quote"
     ],
-    "handler":handlers.quotes
+    "handler": handlers.quotes,
+    "help_text": """quote:   
+        add: <name> <quote> Adds the quote to be able to be called
+        del | delete | remove | rm <name>: Deletes the quote from the listing
+        list: Lists available quotes
+        rand: Gives a random quote
+        <quote_name>: Displays the quote
+        
+    """
 } )
 
 commands.append(  {
