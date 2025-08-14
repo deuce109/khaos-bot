@@ -1,15 +1,15 @@
-FROM python:3.10
+FROM python:alpine
 WORKDIR /app
 
-ARG bot_token
-
-RUN apt-get update && apt-get install -y python3-pip
+RUN apk add py3-pip
 
 COPY ./requirements.txt ./
 
 RUN pip install -r ./requirements.txt
-COPY ./ ./
+COPY ./bot ./bot
+COPY ./main.py ./main.py
+COPY ./docker-start.sh ./docker-start.sh
 
-ENV DISCORD_BOT_SECRET=${bot_token}
+VOLUME /etc/ip-bot/
 
-ENTRYPOINT [ "python", "main.py" ]
+ENTRYPOINT [ "./docker-start.sh" ]

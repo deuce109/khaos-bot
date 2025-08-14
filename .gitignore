@@ -2,6 +2,7 @@ Include
 Lib
 Scripts
 pyvenv.cfg
+.vscode
 
 handlertest.py
 *.json

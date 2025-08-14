@@ -1,39 +1,44 @@
 import shlex
 import discord
-import bot.commands as commands
+from bot.discovery import exec_command
+import logging
+
 
 
 class MyClient(discord.Client):
+    
+    def __init__(self, intents, secret: str):
+        super().__init__(intents=intents)
+        self.secret = secret
+    
+    def start_bot(self):
+        
+        if self.secret:
+            super().run(self.secret)
+        else:
+            logging.error("No secret provided for the bot. Exiting.")
 
 
     async def on_ready(self):
-        print('Logged on as', self.user)
+        logging.info('Logged on as %s', self.user)
 
-    async def on_message(self, message):
-        # don't respond to ourselves
-        if message.author == self.user:
-            return
+    async def on_message(self, message: discord.Message):
 
         
         content: str = message.content
+        
+        prefix = "!"
 
-        if content.startswith("!"):
+        if message.author != self.user and content.startswith(prefix):
+            content = content[len(prefix):]
 
-            content = content.replace("!", "", 1)
-            command = shlex.split(content.strip())
-            base_command = command[0]
-            args = command[1:]
-
-            def fallback(args=None):
-
-                message_string = "Unknown command: %s" % base_command
-                if args:
-                    message_string += "\nArguments: " + ", ".join(args)
-
-                return message_string
-
-            mapping = commands.get_command(base_command) or fallback
-
-            message_source = message.channel if message.channel else message.author
-
-            await message_source.send(mapping(args))
+            args = shlex.split(content)
+            
+            return_message = exec_command(args[0], args[1:])
+            
+            try:
+                await message.reply(return_message)
+            except Exception as e:
+                logging.error(f"Error replying to message: {e}")
+            
+            

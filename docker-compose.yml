@@ -1,13 +1,11 @@
-version: "3"
-
 services:
   ip-bot:
-    container_name: ip-bot
     image: ip-bot:latest
-    build:
-      context: ./
-      args:
-        bot_token: ${DISCORD_BOT_SECRET}
     volumes:
-    - //var/run/docker.sock:/var/run/docker.sock:ro
-    - ./data:/app/data
+    - ./data:/etc/ip-bot
+    secrets:
+      - discord-bot-token
+
+secrets:
+  discord-bot-token:
+    external: true
