@@ -1,8 +1,8 @@
 services:
   ip-bot:
-    image: ip-bot:latest
+    image: deuce109/khaos-bot:latest
     volumes:
-    - ./data:/etc/ip-bot
+    - ./data:/etc/khaos-bot
     secrets:
       - discord-bot-token
 
