@@ -17,7 +17,7 @@ def get_secret():
         logging.warning(f"Could not read secret from file: {e}")
         
     
-    return secret if secret else os.getenv('DISCORD_BOT_SECRET', "")
+    return secret if secret else os.getenv('DISCORD_TOKEN', "")
 
 discovery.load_plugins()
 

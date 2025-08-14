@@ -2,6 +2,7 @@ import shlex
 import discord
 from bot.discovery import exec_command
 import logging
+import os
 
 
 
@@ -27,7 +28,7 @@ class MyClient(discord.Client):
         
         content: str = message.content
         
-        prefix = "!"
+        prefix = os.getenv("BOT_COMMAND_PREFIX", "!")
 
         if message.author != self.user and content.startswith(prefix):
             content = content[len(prefix):]

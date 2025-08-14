@@ -42,12 +42,12 @@ def get_plugins(modules: list[str]):
             logging.warning(f"Module {module_path} not found in sys.modules.")
             continue
         command_string = getattr(module, "COMMAND", None)
-        excutable: Optional[Callable[[list[str]], str]] = getattr(module, "exec", None)
+        excutable: Optional[Callable[[list[str]], str]] = getattr(module, "execute", None)
         if command_string and excutable and callable(excutable):
             plugins[command_string] = excutable
             logging.info(f"Loaded plugin {module_name} as command {command_string}")
         else:
-            logging.warning(f"Plugin {module_name} does not have a valid command or exec function.")
+            logging.warning(f"Plugin {module_name} does not have a valid command or execute function.")
             
 def load_plugins():
     modules = search_for_plugins()
