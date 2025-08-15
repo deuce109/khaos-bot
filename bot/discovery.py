@@ -13,7 +13,7 @@ plugins: dict[str, Callable[[list[str], list[Attachment]], str]] = {
 def help_exec() -> str:
     return "Available commands: " + ", ".join(plugins.keys())
 
-def search_for_plugins(path: str = "/etc/ip-bot/plugins") -> list[str]:
+def search_for_plugins(path: str = "/app/bot/plugins") -> list[str]:
     modules = []
     
     file_path = os.path.abspath(path)

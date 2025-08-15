@@ -1,8 +1,8 @@
 #!/bin/sh
 
 
-if [ ! -d "/etc/khaos-bot/plugins" ]; then
-    mkdir -p /etc/khaos-bot/plugins
+if [ -d "/etc/khaos-bot/plugins" ]; then
+    cp /etc/khaos-bot/plugins/* /app/bot/plugins
 fi
 
 if [ -f "/etc/khaos-bot/plugins/requirements.txt" ]; then

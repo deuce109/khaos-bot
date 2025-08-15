@@ -1,10 +1,22 @@
 services:
-  ip-bot:
+  khaos-bot:
     image: deuce109/khaos-bot:latest
     volumes:
-    - ./data:/etc/khaos-bot
+    - ../../khaos-bot-plugins/:/etc/khaos-bot/plugins
     secrets:
       - discord-bot-token
+    deploy:
+      mode: global
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+      rollback_config:
+        parallelism: 0
+        delay: 0s
+        order: start-first
+      restart_policy:
+        condition: on-failure
 
 secrets:
   discord-bot-token:

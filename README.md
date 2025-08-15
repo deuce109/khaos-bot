@@ -56,7 +56,7 @@ If extra third party libraries are needed add them to `/etc/khaos-bot/plugins/re
 
 ```yaml
 services:
-  ip-bot:
+  khaos-bot:
     image: deuce109/khaos-bot:latest
     volumes:
     - ./data:/etc/khaos-bot
@@ -72,7 +72,7 @@ secrets:
 
 ```yaml
 services:
-  ip-bot:
+  khaos-bot:
     image: deuce109/khaos-bot:latest
     volumes:
     - ./data:/etc/khaos-bot

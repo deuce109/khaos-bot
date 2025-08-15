@@ -9,7 +9,7 @@ COPY ./bot ./bot
 COPY ./main.py ./main.py
 COPY ./startup/docker-start.sh ./docker-start.sh
 
-VOLUME /etc/ip-bot/
+VOLUME /etc/khaos-bot/
 
 RUN adduser -S python \
     && mkdir -p "/etc/khaos-bot/plugins" "/etc/khaos-bot/data"\
