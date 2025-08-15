@@ -3,10 +3,11 @@ import os
 import importlib
 import logging
 import sys
+from discord import Attachment
 from typing import Callable, Optional
 
-plugins: dict[str, Callable[[list[str]], str]] = {
-    "help": lambda _: help_exec(),
+plugins: dict[str, Callable[[list[str], list[Attachment]], str]] = {
+    "help": lambda _, __: help_exec(),
 }
 
 def help_exec() -> str:
@@ -42,7 +43,7 @@ def get_plugins(modules: list[str]):
             logging.warning(f"Module {module_path} not found in sys.modules.")
             continue
         command_string = getattr(module, "COMMAND", None)
-        excutable: Optional[Callable[[list[str]], str]] = getattr(module, "execute", None)
+        excutable: Optional[Callable[[list[str], list[Attachment]], str]] = getattr(module, "execute", None)
         if command_string and excutable and callable(excutable):
             plugins[command_string] = excutable
             logging.info(f"Loaded plugin {module_name} as command {command_string}")
@@ -59,9 +60,9 @@ def load_plugins():
         logging.warning("No valid plugins found.")
     
     
-def exec_command(command: str, args: list[str]) -> str:
+def exec_command(command: str, args: list[str], attachments: list[Attachment]) -> str:
     if command in plugins.keys():
-        return plugins[command](args)
+        return plugins[command](args, attachments)
     else:
         logging.warning(f"Command {command} not found in plugins.")
         return f"Command '{command}' not found. Use '!help' to see available commands."

@@ -32,10 +32,12 @@ class MyClient(discord.Client):
 
         if message.author != self.user and content.startswith(prefix):
             content = content[len(prefix):]
+            
+            
 
             args = shlex.split(content)
             
-            return_message = exec_command(args[0], args[1:])
+            return_message = exec_command(args[0], args[1:], message.attachments)
             
             try:
                 await message.reply(return_message)
