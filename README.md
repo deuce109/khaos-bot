@@ -80,3 +80,11 @@ services:
     - DISCORD_TOKEN=<your-discord-token-here>
     - BOT_COMMAND_PREFIX="#"
 ```
+
+## Supporting
+If you want to support development of this bot you can do so in a few ways
+### Donation
+Kofi - https://ko-fi.com/deuce109
+Patreon - https://www.patreon.com/c/deuce109
+### Development
+If you would like to contribute to Khaos Bot then you will need the latest version of python available at https://www.python.org/downloads/
