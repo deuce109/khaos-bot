@@ -2,7 +2,7 @@ services:
   khaos-bot:
     image: deuce109/khaos-bot:latest
     volumes:
-    - ../../khaos-bot-plugins/:/etc/khaos-bot/plugins
+    - ../../khaos-bot-plugins/:/opt/khaos-bot/plugins
     secrets:
       - discord-bot-token
     deploy:

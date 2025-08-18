@@ -23,17 +23,18 @@ The Discord token can be passed in one of two ways.
 ## Volumes
 In order to load plugins you will need to mount a Docker volume to the container.
 
-Using the Docker CLI that looks like this `docker run -v ./data:/etc/khaos-bot deuce109/khaos-bot`. This will mount `<your-current-directory>/data` to `/etc/khaos-bot` inside the container.
+Using the Docker CLI that looks like this `docker run -v ./data:/opt/khaos-bot deuce109/khaos-bot`. This will mount `<your-current-directory>/data` to `/opt/khaos-bot` inside the container.
 
 ## Environment Variables
 
 - `BOT_COMMAND_PREFIX` Sets the prefix for the bot to recognize for commands (default: `!`)
 - `DISCORD_TOKEN` Set this to pass the Discord Bot Token by environment variable
+- `PACKAGE_LIST` Path to extra OS packages in case of necessity for third party libraries (default: `/opt/khaos-bot/plugins/packages.txt`)
 
 ## Plugins
 
 ### Installing Plugins
-In order to install plugins you will need to add them to `/etc/khaos-bot/plugins`. If using the above command this path will be `./data/plugins`.
+In order to install plugins you will need to add them to `/opt/khaos-bot/plugins`. If using the above command this path will be `./data/plugins`.
 
 ### Basic Plugins
 Some basic default plugins are available at https://github.com/deuce109/khaos-bot-plugins
@@ -47,7 +48,7 @@ Plugins need to be a Python script that have the following 2 attributes at a min
 
 Some examples can be seen at https://github.com/deuce109/khaos-bot-plugins
 
-If extra third party libraries are needed add them to `/etc/khaos-bot/plugins/requirements.txt`
+If extra third party libraries are needed add them to `/opt/khaos-bot/plugins/requirements.txt`
 
 
 ### Setup Examples
@@ -59,7 +60,7 @@ services:
   khaos-bot:
     image: deuce109/khaos-bot:latest
     volumes:
-    - ./data:/etc/khaos-bot
+    - ./data:/opt/khaos-bot
     secrets:
       - discord-bot-token
 
@@ -75,7 +76,7 @@ services:
   khaos-bot:
     image: deuce109/khaos-bot:latest
     volumes:
-    - ./data:/etc/khaos-bot
+    - ./data:/opt/khaos-bot
     environment:
     - DISCORD_TOKEN=<your-discord-token-here>
     - BOT_COMMAND_PREFIX="#"
