@@ -14,11 +14,36 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build alpine Docker image
-      run: docker build . --file Dockerfile --tag deuce109/khaos-bot:alpine --build-arg TAG=alpine
-    - name: Build slim Docker image
-      run: docker build . --file Dockerfile --tag deuce109/khaos-bot:slim --build-arg TAG=slim
-    - name: Build trixie Docker image
-      run: docker build . --file Dockerfile --tag deuce109/khaos-bot:trixie --build-arg TAG=trixie
     - name: Build bookworm Docker image
-      run: docker build . --file Dockerfile --tag deuce109/khaos-bot:bookworm --build-arg TAG=bookworm
+      run: docker build . --file docker/dockerfile --tag deuce109/khaos-bot:${TAG} --build-arg TAG=${TAG}
+      env:
+        TAG: bookworm
+    - name: Build alpine Docker image
+      run: docker build . --file docker/dockerfile --tag deuce109/khaos-bot:${TAG} --build-arg TAG=${TAG}
+      env:
+        TAG: alpine
+    - name: Build slim Docker image
+      run: docker build . --file docker/dockerfile --tag deuce109/khaos-bot:${TAG} --build-arg TAG=${TAG}
+      env:
+        TAG: slim
+    - name: Build trixie Docker image
+      run: docker build . --file docker/dockerfile --tag deuce109/khaos-bot:${TAG} --build-arg TAG=${TAG}
+      env:
+        TAG: trixie
+
+    - name: Tag alpine to latest
+      run: docker tag deuce109/khaos-bot:alpine deuce109/khaos-bot:latest
+
+    - name: Docker login
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push to docker
+      run: |
+        docker push deuce109/khaos-bot:bookworm
+        docker push deuce109/khaos-bot:alpine
+        docker push deuce109/khaos-bot:slim
+        docker push deuce109/khaos-bot:trixie
+        docker push deuce109/khaos-bot:latest
