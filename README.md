@@ -1,6 +1,6 @@
 # Khaos Bot
 
-A Docker based Discord bot that is designed to do nothing by default but allow for users to create their own commands via a plugin system.
+A Docker based Discord bot that is designed to allow for users to create their own commands via a plugin system.
 
 It is recommended to understand Docker before attempting to set this up.
 
@@ -36,6 +36,11 @@ Using the Docker CLI that looks like this `docker run -v ./data:/opt/khaos-bot d
 - `PACKAGE_LIST` Path to extra OS packages in case of necessity for third party libraries (default: `/opt/khaos-bot/plugins/packages.txt`)
 
 ## Plugins
+
+### Builtin Plugins
+
+- `help` Lists the available commands
+- `reload` Attempts to find new pluings in the specified plugin folder, does not reload libraries or packages
 
 ### Installing Plugins
 
