@@ -25,10 +25,13 @@ jobs:
     - name: Build and push Docker image
       run: |
         docker build . --file docker/dockerfile --tag deuce109/khaos-bot:${{ matrix.tag }} --build-arg TAG=${{ matrix.tag }}
+        docker tag deuce109/khaos-bot:${{ matrix.tag }} deuce109/khaos-bot:${{ matrix.tag }}-${{ github.event.release.tag_name }}
+        docker push deuce109/khaos-bot:${{ matrix.tag }}-${{ github.event.release.tag_name }}
         docker push deuce109/khaos-bot:${{ matrix.tag }}
 
     - name: Tag and push latest
       if: matrix.tag == 'alpine'
       run: |
         docker tag deuce109/khaos-bot:alpine deuce109/khaos-bot:latest
+        docker tag decue109/khaos-bot:alpine deuce109/khaos-bot:${{ github.event.release.tag_name }}
         docker push deuce109/khaos-bot:latest

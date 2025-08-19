@@ -3,6 +3,7 @@
 /bin/sh ./detect-os.sh
 
 if [ -d "/opt/khaos-bot/plugins" ]; then
+    mkdir -p /app/bot/plugins
     cp /opt/khaos-bot/plugins/*.py /app/bot/plugins
 fi
 

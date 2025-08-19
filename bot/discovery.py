@@ -6,9 +6,13 @@ import sys
 from discord import Attachment
 from typing import Callable, Optional
 
-plugins: dict[str, Callable[[list[str], list[Attachment]], str]] = {
+DEFAULT_PLUGINS: dict[str, Callable[[list[str], list[Attachment]], str]] = {
     "help": lambda _, __: help_exec(),
+    "reload": lambda _, __: load_plugins()
 }
+
+
+plugins: dict[str, Callable[[list[str], list[Attachment]], str]] = {}
 
 def help_exec() -> str:
     return "Available commands: " + ", ".join(plugins.keys())
@@ -36,6 +40,8 @@ def search_for_plugins(path: str = "/app/bot/plugins") -> list[str]:
             
         
 def get_plugins(modules: list[str]):
+    global plugins
+    plugins = DEFAULT_PLUGINS
     for module_name in modules:
         module_path = f"bot.plugins.{module_name}"
         module = sys.modules.get(module_path)
@@ -53,11 +59,15 @@ def get_plugins(modules: list[str]):
 def load_plugins():
     modules = search_for_plugins()
     if not modules:
-        logging.warning("No plugins found.")
-        return
+        logging.warning("No plugins discovered.")
+        return "No plugins discovered."
     get_plugins(modules)
-    if not plugins:
-        logging.warning("No valid plugins found.")
+    if plugins:
+        return f"Plugins loaded: {'\n'.join(plugins.keys())}"
+    else:
+        logging.warning("No plugins loaded.")
+        return "No plugins loaded."
+        
     
     
 def exec_command(command: str, args: list[str], attachments: list[Attachment]) -> str:
@@ -66,5 +76,3 @@ def exec_command(command: str, args: list[str], attachments: list[Attachment]) -
     else:
         logging.warning(f"Command {command} not found in plugins.")
         return f"Command '{command}' not found. Use '!help' to see available commands."
-    
-load_plugins()

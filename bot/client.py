@@ -32,8 +32,6 @@ class MyClient(discord.Client):
 
         if message.author != self.user and content.startswith(prefix):
             content = content[len(prefix):]
-            
-            
 
             args = shlex.split(content)
             
