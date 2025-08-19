@@ -6,10 +6,13 @@ import sys
 from discord import Attachment
 from typing import Callable, Optional
 
-plugins: dict[str, Callable[[list[str], list[Attachment]], str]] = {
+DEFAULT_PLUGINS: dict[str, Callable[[list[str], list[Attachment]], str]] = {
     "help": lambda _, __: help_exec(),
     "reload": lambda _, __: load_plugins()
 }
+
+
+plugins: dict[str, Callable[[list[str], list[Attachment]], str]] = {}
 
 def help_exec() -> str:
     return "Available commands: " + ", ".join(plugins.keys())
@@ -37,6 +40,8 @@ def search_for_plugins(path: str = "/app/bot/plugins") -> list[str]:
             
         
 def get_plugins(modules: list[str]):
+    global plugins
+    plugins = DEFAULT_PLUGINS
     for module_name in modules:
         module_path = f"bot.plugins.{module_name}"
         module = sys.modules.get(module_path)
