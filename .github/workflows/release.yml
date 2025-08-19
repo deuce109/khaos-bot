@@ -33,5 +33,5 @@ jobs:
       if: matrix.tag == 'alpine'
       run: |
         docker tag deuce109/khaos-bot:alpine deuce109/khaos-bot:latest
-        docker tag decue109/khaos-bot:alpine deuce109/khaos-bot:${{ github.event.release.tag_name }}
+        docker tag deuce109/khaos-bot:alpine deuce109/khaos-bot:${{ github.event.release.tag_name }}
         docker push deuce109/khaos-bot:latest
